@@ -1,4 +1,5 @@
 import React from 'react'
+import MajorDrop from './MajorDrop'
 
 export default class DepartmentDrop extends React.Component {
     constructor() {
@@ -6,16 +7,16 @@ export default class DepartmentDrop extends React.Component {
         this.state = {selectValue: ''}
     }
     handleChange = (event) => {
-        this.setState({selectValue: event.target.value}, ()=> {alert(`Value: ${this.state.selectValue}`)});
+        this.setState({selectValue: event.target.value});
         }
     
     render() {
         return (
         <div>
             <select onChange={this.handleChange}>
-                    <option value=""> </option>
+                    <option value="empty"> </option>
                     <option value="arts">Arts</option>
-                    <option values="bioscis">Biological Sciences</option>
+                    <option value="bioscis">Biological Sciences</option>
                     <option value="bus">Business</option>
                     <option value="edu">Education</option>
                     <option value="engine">Engineering</option>
@@ -28,6 +29,8 @@ export default class DepartmentDrop extends React.Component {
                     <option value="soceco">Social Ecology</option>
                     <option value="social">Social Sciences</option>
             </select>
+            <h1>Now select your major!</h1>
+            <MajorDrop department={this.state.selectValue} />
         </div>
     );
     }
