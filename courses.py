@@ -2,6 +2,6 @@ import requests
 
 instructor_id = input()
 
-def parse_instructor_data(course_id:str):
-    response = requests.get("https://api.peterportal.org/rest/v0/instructors/" + instructor_id)
+def parse_course_data(course_id:str):
+    response = requests.get("https://api.peterportal.org/rest/v0/courses/" + course_id)
     return response.json()
