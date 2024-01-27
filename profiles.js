@@ -19,18 +19,73 @@ function getProfs(netid)
 	});
 }
 
+function format(list){
+	
+	var i = 0;
+	while (i < list.length) {
+
+		if(list[i] === " "){
+
+			if (i != list.length -1){
+
+				if (list[i+1] === " "){
+
+					list.splice(i,1)
+				} else {
+					i++;
+				}
+			} else {
+
+				break
+			}
+		} else {
+			i++;
+		}
+	}
+
+
+	return list.join('')
+}
+
 function getProfIDs(profs)
 {
 	for (const link of profs)
-	{
-		axios.get(`https://www.faculty.uci.edu/${link}`).then(({ data }) => { 
-			const $ = cheerio.load(data);
-			const spans = [];
-			$('div.research-interests').each((_idx, el) => {
-			const span = $(el).text();
+	{	
+		//console.log(link)
+		axios.get(`https://www.faculty.uci.edu/${link}`) 
+		.then(({ data }) => 
+		
+		{//console.log(data);
+		const $ = cheerio.load(data);
+		const spans = [];
+		//console.log($('div#research-interests'))
+		$('div#research-interests').each((_idx, el) => { //Not even getting triggered 
+			
+			//console.log("here");
+			span = $(el).text();
+			spans.push(span);
+			
+			oldList = span.split('');
+			
+			span = span.replace(/\n/g, '');
+		
+			span = format(span.split(''))
+			span = span.trim()
+			console.log(span);
+
+			//console.log(spans);
+		});
+		$('div#contact-info').each((_idx, el) => { //Not even getting triggered 
+			
+			//console.log("here");
+			span = $(el).text();
+			span = span.replace(/\n/g, '');
+			span = format(span.split(''))
 			spans.push(span);
 			console.log(span);
-			});
+			//console.log(spans);
+		});
+		
 		});
 	}
 }
