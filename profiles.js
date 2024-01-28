@@ -169,5 +169,5 @@ async function profilesMain(uciNetId){
 	return string
 }
 
-profilesMain("cooper")
+// a test: profilesMain("cooper") it works 
 
