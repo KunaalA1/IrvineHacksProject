@@ -82,11 +82,17 @@
                     const instructorElement = document.createElement('div');
                     instructorElement.innerHTML = 
                     ` <ul class="list-group">
-                        <li class="list-group-item">${name}, email: ${email} title: ${title} 
+                        <li class="list-group-item">${name}
                             <div>
 
                               <button type="button" class="btn btn-lg btn-light">Add to list</button>
-                              <button type="button" class="btn btn-lg btn-light">Details</button>
+                              <button type="button" class="btn btn-lg btn-light" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">Details</button>
+                            </div>
+                            <div class="collapse" id="collapseExample">
+                              <div class="card card-body">
+                                Email: ${email}\n
+                                Title: ${title}
+                              </div>
                             </div>
                             </li>
                     </ul>`;
