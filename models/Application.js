@@ -1,33 +1,26 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const courseSchema = new Schema(
+const AppSchema = new Schema(
     {
-        title: {
+        prof_name:{
             type: String,
             required: true
         },
-        instructor: {
+        notes: {
             type: String,
             required: true
         },
-        department: {
+        research_topics:{
             type: String,
-            required: true
-
-        },
-        prerequisites:{
-            type: Array,
             required:true
-
         },
-        finished: {
+        finished:{
             type: Boolean,
-            default: false,
             required: true
         }
     }
 );
 
-const Course = mongoose.model('Course', courseSchema);
-module.exports = Course;
+const App = mongoose.model('Course', AppSchema);
+module.exports = App;

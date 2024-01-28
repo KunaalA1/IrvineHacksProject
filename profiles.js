@@ -19,21 +19,124 @@ function getProfs(netid)
 	});
 }
 
-function getProfIDs(profs)
-{
-	for (const link of profs)
-	{
-		axios.get(`https://www.faculty.uci.edu/${link}`).then(({ data }) => { 
-			const $ = cheerio.load(data);
-			const spans = [];
-			$('div.research-interests').each((_idx, el) => {
-			const span = $(el).text();
-			spans.push(span);
-			console.log(span);
-			});
-		});
+function format(list){
+	
+	var i = 0;
+	while (i < list.length) {
+
+		if(list[i] === " "){
+
+			if (i != list.length -1){
+
+				if (list[i+1] === " "){
+
+					list.splice(i,1)
+				} else {
+					i++;
+				}
+			} else {
+
+				break
+			}
+		} else {
+			i++;
+		}
 	}
+
+
+	return list.join('')
 }
 
-const profs = ["profile/?facultyId=4661"];
-interests = getProfIDs(profs);
+function getProfIDs(link)
+{
+	return new Promise(async (resolve, reject) => {
+
+
+		
+		details = {}
+
+		await axios.get(`https://www.faculty.uci.edu/${link}`) 
+		.then(({ data }) => 
+		
+		{//console.log(data);
+		const $ = cheerio.load(data);
+		const spans = [];
+		//console.log($('div#research-interests'))
+		$('div#research-interests').each((_idx, el) => { //Not even getting triggered 
+			
+			//console.log("here");
+			span = $(el).text();
+			spans.push(span);
+			
+			oldList = span.split('');
+			
+			span = span.replace(/\n/g, '');
+		
+			span = format(span.split(''))
+			span = span.trim()
+			console.log(span);
+			details.research = span;
+
+			//console.log(spans);
+		});
+		$('div#contact-info').each((_idx, el) => { //Not even getting triggered 
+			
+			//console.log("here");
+			span = $(el).text();
+			span = span.replace(/\n/g, '');
+			span = format(span.split(''))
+			spans.push(span);
+			console.log(span);
+			details.contact = span
+			//console.log(spans);
+		});
+		
+		});
+
+		console.log(details)
+
+
+	resolve();
+	})
+	
+}
+
+
+function profileGen(uciNetId){
+
+	return new Promise(async (resolve,reject) => {
+
+
+		await axios.get(`https://faculty.uci.edu/search?search_type=nameorucinetid&search_term=${uciNetId}`) 
+		.then(async ({ data }) => {
+
+			const $ = cheerio.load(data);
+			profileLink = $('a[title^="View Profile For:"]').attr('href')
+			console.log(profileLink)
+			await getProfIDs(profileLink) //Skips this part for some reason
+			
+			// $('a[title^="View Profile For:"]').each((_idx, el) => {
+
+			// 	console.log($(el).attr('href'))
+			// })
+			
+
+
+		})
+
+	//const profs = ["profile/?facultyId=4661"];
+	//interests = await getProfIDs(profs);
+	
+	resolve();
+
+	})
+}
+
+
+async function test(){
+
+	await profileGen("cooper");
+
+}
+
+test()
