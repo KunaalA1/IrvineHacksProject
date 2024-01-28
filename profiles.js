@@ -47,12 +47,15 @@ function format(list){
 	return list.join('')
 }
 
-function getProfIDs(profs)
+function getProfIDs(link)
 {
-	for (const link of profs)
-	{	
-		//console.log(link)
-		axios.get(`https://www.faculty.uci.edu/${link}`) 
+	return new Promise(async (resolve, reject) => {
+
+
+		
+		details = {}
+
+		await axios.get(`https://www.faculty.uci.edu/${link}`) 
 		.then(({ data }) => 
 		
 		{//console.log(data);
@@ -72,6 +75,7 @@ function getProfIDs(profs)
 			span = format(span.split(''))
 			span = span.trim()
 			console.log(span);
+			details.research = span;
 
 			//console.log(spans);
 		});
@@ -83,22 +87,34 @@ function getProfIDs(profs)
 			span = format(span.split(''))
 			spans.push(span);
 			console.log(span);
+			details.contact = span
 			//console.log(spans);
 		});
 		
 		});
-	}
+
+		console.log(details)
+
+
+	resolve();
+	})
+	
 }
 
 
+function profileGen(uciNetId){
 
-axios.get(`https://faculty.uci.edu/search?search_type=nameorucinetid&search_term=cooper`) 
-		.then(({ data }) => {
+	return new Promise(async (resolve,reject) => {
+
+
+		await axios.get(`https://faculty.uci.edu/search?search_type=nameorucinetid&search_term=${uciNetId}`) 
+		.then(async ({ data }) => {
 
 			const $ = cheerio.load(data);
 			profileLink = $('a[title^="View Profile For:"]').attr('href')
 			console.log(profileLink)
-			getProfIDs([profileLink])
+			await getProfIDs(profileLink) //Skips this part for some reason
+			
 			// $('a[title^="View Profile For:"]').each((_idx, el) => {
 
 			// 	console.log($(el).attr('href'))
@@ -108,5 +124,19 @@ axios.get(`https://faculty.uci.edu/search?search_type=nameorucinetid&search_term
 
 		})
 
-const profs = ["profile/?facultyId=4661"];
-interests = getProfIDs(profs);
+	//const profs = ["profile/?facultyId=4661"];
+	//interests = await getProfIDs(profs);
+	
+	resolve();
+
+	})
+}
+
+
+async function test(){
+
+	await profileGen("cooper");
+
+}
+
+test()
