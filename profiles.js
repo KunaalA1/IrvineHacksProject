@@ -139,8 +139,4 @@ async function test(){
 
 }
 
-<<<<<<< HEAD
 test()
-=======
-test()
->>>>>>> 89d2102436837146a8b5f77b0112ecaafd27ce80
