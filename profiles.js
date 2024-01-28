@@ -90,5 +90,23 @@ function getProfIDs(profs)
 	}
 }
 
+
+
+axios.get(`https://faculty.uci.edu/search?search_type=nameorucinetid&search_term=cooper`) 
+		.then(({ data }) => {
+
+			const $ = cheerio.load(data);
+			profileLink = $('a[title^="View Profile For:"]').attr('href')
+			console.log(profileLink)
+			getProfIDs([profileLink])
+			// $('a[title^="View Profile For:"]').each((_idx, el) => {
+
+			// 	console.log($(el).attr('href'))
+			// })
+			
+
+
+		})
+
 const profs = ["profile/?facultyId=4661"];
 interests = getProfIDs(profs);
