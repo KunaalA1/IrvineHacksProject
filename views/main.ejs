@@ -79,13 +79,16 @@
                     const email = element.email;
                     const name = element.name;
                     const title = element.title;
+                    const ucinetid = element.ucinetid;
+                    console.log(ucinetid);
                     const instructorElement = document.createElement('div');
                     instructorElement.innerHTML = 
                     ` <ul class="list-group">
                         <li class="list-group-item">${name}, email: ${email} title: ${title} 
                             <div>
 
-                            <button>Add to list</button>
+                                <button onClick="addApplication('${name}','${email}', '${ucinetid}')" class="btn black-background" data-bs-toggle="modal" data-bs-target="#exampleModal">Add to List
+                                    </button>
                             <button>Details</button>
                             </div>
                             </li>
@@ -96,7 +99,17 @@
                 }
             });
         }
-
+        function addApplication(name, email, ucinetid){
+            const data = {prof_name: name, notes: email, research_topics: "Nothing Here Yet!", finished: false, ucinetid: ucinetid};
+            console.log(data); 
+            const endpoint = '/applications';
+            fetch(endpoint, {
+                method: "POST",
+                headers: {"Content-Type": 'application/json'},
+                body: JSON.stringify(data)
+            })
+            .catch(err=> console.log(err));
+        }
     </script>
    
    

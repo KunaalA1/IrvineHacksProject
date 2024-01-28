@@ -18,6 +18,10 @@ const AppSchema = new Schema(
         finished:{
             type: Boolean,
             required: true
+        },
+        ucinetid:{
+            type: String,
+            required: true
         }
     }
 );

@@ -6,8 +6,10 @@ const courseController = require('../controllers/courseController');
 
 router.get('/profs', courseController.prof_index);
 
-router.get('/profs/:id', courseController.prof_details);
-router.post('/profs/')
+router.get('/profs/applications', courseController.prof_apps);
+router.post('/profs/applications', courseController.prof_app_post);
+
+
 
 
 
