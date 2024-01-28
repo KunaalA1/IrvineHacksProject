@@ -46,7 +46,7 @@ const prof_apps = (req, res) => {
 }
 const prof_app_delete = (req, res) => {
     const id = req.params.id;
-    App.findByIdAndDelete(id, {finished: true})
+    App.findByIdAndDelete(id)
     .then(result => {
         res.json({redirect: '/profs'});
     })
