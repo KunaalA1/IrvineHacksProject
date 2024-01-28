@@ -90,13 +90,45 @@ function getProfIDs(link)
 			details.contact = span
 			//console.log(spans);
 		});
-		
+		$('a[href^="https://faculty.uci.edu/profile/?facultyId="]').each((_idx, el) => { //Not even getting triggered 
+			
+			//console.log("here");
+			span = $(el).text();
+			span = span.replace(/\n/g, '');
+			span = format(span.split(''));
+			spans.push(span);
+			console.log(span);
+			details.facultyPage = span
+			//console.log(spans);
 		});
+
+		$('div#Websites').each((_idx, el) => { //Not even getting triggered 
+		
+			//console.log("here");
+			span = $(el).text();
+		
+			span = span.replace(/\n/g, '');
+			span = format(span.split(''));
+			spans.push(span);
+			console.log(span);
+
+			if (span.includes("www")) {
+
+				details.websites = span
+			} else {
+
+				details.websites = "No other links on faculty site. Try google."
+			}
+		
+			//console.log(spans);
+			})
+		});
+	
 
 		console.log(details)
 
 
-	resolve();
+	resolve(details);
 	})
 	
 }
@@ -113,7 +145,7 @@ function profileGen(uciNetId){
 			const $ = cheerio.load(data);
 			profileLink = $('a[title^="View Profile For:"]').attr('href')
 			console.log(profileLink)
-			await getProfIDs(profileLink) //Skips this part for some reason
+			detailsJSON = await getProfIDs(profileLink) //Skips this part for some reason
 			
 			// $('a[title^="View Profile For:"]').each((_idx, el) => {
 
@@ -127,16 +159,10 @@ function profileGen(uciNetId){
 	//const profs = ["profile/?facultyId=4661"];
 	//interests = await getProfIDs(profs);
 	
-	resolve();
+	resolve(detailsJSON);
 
 	})
 }
 
+profileGen("cooper")
 
-async function test(){
-
-	await profileGen("cooper");
-
-}
-
-test()
