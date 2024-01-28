@@ -60,13 +60,13 @@ function getProfIDs(link)
 		
 		{//console.log(data);
 		const $ = cheerio.load(data);
-		const spans = [];
+	
 		//console.log($('div#research-interests'))
 		$('div#research-interests').each((_idx, el) => { //Not even getting triggered 
 			
 			//console.log("here");
 			span = $(el).text();
-			spans.push(span);
+		
 			
 			oldList = span.split('');
 			
@@ -74,7 +74,7 @@ function getProfIDs(link)
 		
 			span = format(span.split(''))
 			span = span.trim()
-			console.log(span);
+			// console.log(span);
 			details.research = span;
 
 			//console.log(spans);
@@ -85,47 +85,45 @@ function getProfIDs(link)
 			span = $(el).text();
 			span = span.replace(/\n/g, '');
 			span = format(span.split(''))
-			spans.push(span);
-			console.log(span);
+			// console.log(span);
 			details.contact = span
 			//console.log(spans);
 		});
 		$('a[href^="https://faculty.uci.edu/profile/?facultyId="]').each((_idx, el) => { //Not even getting triggered 
 			
-			//console.log("here");
+
 			span = $(el).text();
+	
 			span = span.replace(/\n/g, '');
 			span = format(span.split(''));
-			spans.push(span);
-			console.log(span);
+		// console.log(span);
 			details.facultyPage = span
 			//console.log(spans);
 		});
 
-		$('div#Websites').each((_idx, el) => { //Not even getting triggered 
+		details.websites = ""
+		$('div.profile-section-item > a').each((_idx, el) => { //Not even getting triggered 
 		
-			//console.log("here");
-			span = $(el).text();
-		
-			span = span.replace(/\n/g, '');
-			span = format(span.split(''));
-			spans.push(span);
-			console.log(span);
+	
+			span = $(el).attr("href");
+	
+			details.websites += span + " ";
+			// console.log(span);
 
-			if (span.includes("www")) {
+			// if (span.includes("www")) {
 
-				details.websites = span
-			} else {
+			// 	details.websites = span
+			// } else {
 
-				details.websites = "No other links on faculty site. Try google."
-			}
+			// 	details.websites = "No other links on faculty site. Try google."
+			// }
 		
 			//console.log(spans);
 			})
 		});
 	
 
-		console.log(details)
+		// console.log(details)
 
 
 	resolve(details);
@@ -144,7 +142,7 @@ function profileGen(uciNetId){
 
 			const $ = cheerio.load(data);
 			profileLink = $('a[title^="View Profile For:"]').attr('href')
-			console.log(profileLink)
+			// console.log(profileLink)
 			detailsJSON = await getProfIDs(profileLink) //Skips this part for some reason
 			
 			// $('a[title^="View Profile For:"]').each((_idx, el) => {
@@ -159,10 +157,17 @@ function profileGen(uciNetId){
 	//const profs = ["profile/?facultyId=4661"];
 	//interests = await getProfIDs(profs);
 	
-	resolve(detailsJSON);
+	return resolve(detailsJSON);
 
 	})
 }
 
-profileGen("cooper")
+async function profilesMain(uciNetId){
+
+	string = await profileGen(uciNetId); //Interestingly, I need a function to 
+	console.log(string)
+	return string
+}
+
+profilesMain("cooper")
 
