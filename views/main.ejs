@@ -25,9 +25,9 @@
           </div>
         </div>
       </nav>
-      <div class="container">
-        <h2>Welcome to the Main Page of Researchify</h2>
-        <p>You can filter for research professors by Department or your research interest</p>   
+      <div class="jumbotron">
+        <h2 class="display-4 text-center">Welcome to the Main Page of Researchify</h2>
+        <p class="lead text-center">You can filter for research professors by Department or your research interest</p>   
         <div class = "form-inline">                
             <select class="custom-select" id = "select_dept">
                 <option selected>Open this select menu</option>
@@ -36,8 +36,8 @@
                 <option value="3">Electrical Engineering & Computer Science</option>
                 <option value="4">Mechanical & Aerospace Engineering</option>
               </select>
-          <button class="btn search" id="search" type="submit">Search</button>
-            </div>   
+              <button class="btn search btn-primary btn-block" id="search" type="submit">Search</button>
+            </div>                 
         <div id = 'query'>
 
         </div>  
@@ -88,11 +88,9 @@
                             <div>
                               <p>${email}</p>
                               <p>${title}</p>
-                              <button type="button" class="btn btn-lg btn-light">Add to list</button>
                             </div>
+                            <button onClick="addApplication('${name}','${email}', '${ucinetid}')" type="button" class="btn btn-lg btn-light">Add to list</button>
 
-                                <button onClick="addApplication('${name}','${email}', '${ucinetid}')" class="btn black-background" data-bs-toggle="modal" data-bs-target="#exampleModal">Add to List
-                                    </button>
                                     <button type="button" class="btn btn-lg btn-light" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">Details</button>
                             </div>
                             </li>
@@ -104,9 +102,10 @@
             });
         }
         function addApplication(name, email, ucinetid){
+            
+            console.log(ucinetid);
             const data = {prof_name: name, notes: email, research_topics: "Nothing Here", finished: false, ucinetid: ucinetid};
-            console.log(data); 
-            const endpoint = '/applications';
+                const endpoint = '/applications';
             fetch(endpoint, {
                 method: "POST",
                 headers: {"Content-Type": 'application/json'},

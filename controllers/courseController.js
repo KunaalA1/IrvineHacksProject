@@ -1,12 +1,38 @@
 const Course = require('../models/Application');
-const profile = require('../profiles')
 const App = require('../models/Application');
+const profileGen = require('../profiles.js');
+
 
 const prof_index = (req, res) => {
     res.render('main', {peterportal: "https://api.peterportal.org/rest/v0/instructors/all"});
 }
+details_json = {};
 
-const prof_app_post = (req, res) => {
+let url = 'https://api.peterportal.org/rest/v0/instructors/all?=';
+
+let options = {method: 'GET', headers: {'User-Agent': 'insomnia/8.6.0'}};
+fetch(url, options)
+  .then(res => res.json())
+  .then(json =>  {details_json = json})
+  .then(() => console.log(details_json))
+  .catch(err => console.error('error:' + err));
+
+
+/*
+
+var final_details = JSON.parse(JSON.stringify(details_json));
+console.log(typeof(final_details));
+for(const key in details_json){
+    details_json[key.ucinetid] = profileGen(x.ucinetid)
+}
+*/
+
+
+
+const prof_app_post = async (req, res) => {
+    //const research_topics = await profileGen(req.body.ucinetid).then(
+    
+    //console.log(research_topics);
     const app = new App({
         prof_name:req.body.prof_name,
         notes: req.body.notes,
@@ -34,6 +60,7 @@ const prof_details = (req, res) => {
         res.render('404');
     })
 }
+
 const prof_apps = (req, res) => {
     App.find().sort({createdAt: -1})
     .then(result => {

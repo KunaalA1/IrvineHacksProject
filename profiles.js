@@ -1,5 +1,6 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const dotenv = require("dotenv");
 
 const extractLinks = $ => [ 
 	...new Set( 
@@ -139,12 +140,13 @@ function profileGen(uciNetId){
 
 		await axios.get(`https://faculty.uci.edu/search?search_type=nameorucinetid&search_term=${uciNetId}`) 
 		.then(async ({ data }) => {
-
+			
 			const $ = cheerio.load(data);
 			profileLink = $('a[title^="View Profile For:"]').attr('href')
 			// console.log(profileLink)
-			detailsJSON = await getProfIDs(profileLink) //Skips this part for some reason
-			
+			console.log("AAA");
+			detailsJSON = await getProfIDs(profileLink).then(result => {return result}) //Skips this part for some reason
+			console.log(detailsJSON)
 			// $('a[title^="View Profile For:"]').each((_idx, el) => {
 
 			// 	console.log($(el).attr('href'))
@@ -152,6 +154,8 @@ function profileGen(uciNetId){
 			
 
 
+		}).catch((err) => {
+			console.log(err);
 		})
 
 	//const profs = ["profile/?facultyId=4661"];
@@ -163,11 +167,12 @@ function profileGen(uciNetId){
 }
 
 
-async function test(){
+async function test(ucinetid){
 
-	await profileGen("cooper");
+	await  profileGen(ucinetid);
 
 }
 
+profileGen("cooper").then(results => console.log(results));
 
-test();
+module.exports = profileGen;
